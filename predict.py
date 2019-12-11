@@ -5,8 +5,43 @@ import os
 import numpy as np
 import pickle as pkl
 import re
+import nltk
 import tensorflow as tf
 from tensorflow.contrib import learn
+
+
+def cryptoIdentifier(input):
+    crypto_dict = dict({"bitcoin": "BTC",
+                       "btc": "BTC",
+                       "ethereum": "ETH",
+                       "eth": "ETH",
+                       "litecoin": "LTC",
+                       "ltc": "LTC",
+                       "dai": "DAI",
+                       "eos": "EOS",
+                       "stellar": "XLM",
+                       "xlm": "XLM",
+                       "bat": "BAT",
+                       "ripple": "XRP",
+                       "xrp": "XRP",
+                       "chainlink": "LINK",
+                       "link": "LINK",
+                       "dash": "DASH",
+                       "tezos": "XTZ",
+                       "xtz": "XTZ",
+                       "zcash": "ZEC",
+                       "zec": "ZEC",
+                       "ox": "ZRX",
+                       "zrx": "ZRX",
+                       "augur": "REP",
+                       "rep": "REP"})
+    input = nltk.tokenize.word_tokenize(input)
+
+    for word in input:
+        if word in crypto_dict:
+            return word
+    return None
+
 
 
 def _clean_data(sent, sw, language='ch'):
@@ -55,7 +90,7 @@ def predict(input):
 
     # FLAGS = tf.app.flags.FLAGS
     # input = FLAGS.input
-    run_dir = 'model'
+    run_dir = 'TextClassification/model'
     checkpoint = 'clf-300'
 
     # Restore parameters
@@ -90,19 +125,27 @@ def predict(input):
         formatted_inp = np.array(list(vocab_processor.transform([sent])))
         input_length = np.array(list(map(len, [sent.strip().split(' ')])))
 
+        # print("INPUT: ", formatted_inp)
+        # print("INPUT: ", sent)
+        # print([sent.strip().split(' ')])
+
         feed_dict = {input_x: formatted_inp, input_y: [1], batch_size: 1, sequence_length: input_length, keep_prob: 1.0}
         # raw_pred, acc = sess.run([predictions, accuracy], feed_dict)
         # print(sess.run([predictions, accuracy], feed_dict)[0][0])
         raw_pred = sess.run([predictions, accuracy], feed_dict)[0][0]
 
         if (raw_pred == 0):
-            pred = 'crypto intro'
+            pred = 'cryptointro'
         if (raw_pred == 1):
             pred = 'price'
         if (raw_pred == 2):
             pred = 'about'
         if (raw_pred == 3):
-            pred = 'compare'
+            pred = 'high'
 
-        return pred
+        ret = [pred, cryptoIdentifier(input)]
+
+        return ret
+
+        # return pred
         # print("PREDICTION: ", pred)
