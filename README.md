@@ -9,6 +9,9 @@ Implement four neural networks in Tensorflow for multi-class text classification
 * Python 3.x  
 * Tensorflow > 1.5
 * Sklearn > 0.19.0  
+## Suggested Runtime
+* Python 3.6.5
+* Tensorflow 1.6.0 
 ## Data Format
 Training data should be stored in csv file. The first line of the file should be ["label", "content"] or ["content", "label"].
 ## Train
@@ -78,9 +81,9 @@ After the training is done, you can use tensorboard to see the visualizations of
 tensorboard --logdir=./runs/1111111111/summaries
 ```
 
-## Test 
+## Test
 Run test.py to evaluate the trained model  
-Parameters: 
+Parameters:
 ```
 optional arguments:
   --test_data_file TEST_DATA_FILE

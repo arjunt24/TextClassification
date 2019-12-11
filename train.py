@@ -1,3 +1,5 @@
+# python3 train.py --data_file=./data/data.csv --clf=cnn --num_classes=4 --save_every_steps=30;2C;2C0 --num_checkpoint=1
+
 # -*- coding: utf-8 -*-
 import os
 import sys
@@ -11,8 +13,8 @@ from tensorflow.contrib import learn
 
 import data_helper
 from rnn_classifier import rnn_clf
-from cnn_classifier import cnn_clf
-from clstm_classifier import clstm_clf
+# from cnn_classifier import cnn_clf
+# from clstm_classifier import clstm_clf
 
 try:
     from sklearn.model_selection import train_test_split
@@ -28,14 +30,14 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # =============================================================================
 
 # Model choices
-tf.flags.DEFINE_string('clf', 'cnn', "Type of classifiers. Default: cnn. You have four choices: [cnn, lstm, blstm, clstm]")
+tf.flags.DEFINE_string('clf', 'blstm', "Type of classifiers. Default: cnn. You have four choices: [cnn, lstm, blstm, clstm]")
 
 # Data parameters
-tf.flags.DEFINE_string('data_file', None, 'Data file path')
+tf.flags.DEFINE_string('data_file', "./data/data.csv", 'Data file path')
 tf.flags.DEFINE_string('stop_word_file', None, 'Stop word file path')
 tf.flags.DEFINE_string('language', 'en', "Language of the data file. You have two choices: [ch, en]")
 tf.flags.DEFINE_integer('min_frequency', 0, 'Minimal word frequency')
-tf.flags.DEFINE_integer('num_classes', 2, 'Number of classes')
+tf.flags.DEFINE_integer('num_classes', 4, 'Number of classes')
 tf.flags.DEFINE_integer('max_length', 0, 'Max document length')
 tf.flags.DEFINE_integer('vocab_size', 0, 'Vocabulary size')
 tf.flags.DEFINE_float('test_size', 0.1, 'Cross validation test size')
@@ -56,8 +58,8 @@ tf.flags.DEFINE_integer('num_epochs', 50, 'Number of epochs')
 tf.flags.DEFINE_float('decay_rate', 1, 'Learning rate decay rate. Range: (0, 1]')  # Learning rate decay
 tf.flags.DEFINE_integer('decay_steps', 100000, 'Learning rate decay steps')  # Learning rate decay
 tf.flags.DEFINE_integer('evaluate_every_steps', 100, 'Evaluate the model on validation set after this many steps')
-tf.flags.DEFINE_integer('save_every_steps', 1000, 'Save the model after this many steps')
-tf.flags.DEFINE_integer('num_checkpoint', 10, 'Number of models to store')
+tf.flags.DEFINE_integer('save_every_steps', 300, 'Save the model after this many steps')
+tf.flags.DEFINE_integer('num_checkpoint', 1, 'Number of models to store')
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -68,7 +70,8 @@ elif FLAGS.clf == 'clstm':
 
 # Output files directory
 timestamp = str(int(time.time()))
-outdir = os.path.abspath(os.path.join(os.path.curdir, "runs", timestamp))
+# outdir = os.path.abspath(os.path.join(os.path.curdir, "runs", "ml_model"))
+outdir = "model"
 if not os.path.exists(outdir):
     os.makedirs(outdir)
 

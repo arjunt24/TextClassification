@@ -1,3 +1,5 @@
+# python3 test.py --test_data_file=./data/data.csv --run_dir=./runs/<MODEL_NAME> --checkpoint=clf-300
+
 # -*- coding: utf-8 -*-
 import os
 import csv
@@ -6,15 +8,15 @@ import pickle as pkl
 import tensorflow as tf
 from tensorflow.contrib import learn
 
-import data_helper
+# import data_helper
 
 # Show warnings and errors only
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # File paths
-tf.flags.DEFINE_string('test_data_file', None, 'Test data file path')
-tf.flags.DEFINE_string('run_dir', None, 'Restore the model from this run')
-tf.flags.DEFINE_string('checkpoint', None, 'Restore the graph from this checkpoint')
+tf.flags.DEFINE_string('test_data_file', "./data/test.csv", 'Test data file path')
+tf.flags.DEFINE_string('run_dir', "model", 'Restore the model from this run')
+tf.flags.DEFINE_string('checkpoint', "clf-300", 'Restore the graph from this checkpoint')
 
 # Test batch size
 tf.flags.DEFINE_integer('batch_size', 64, 'Test batch size')
